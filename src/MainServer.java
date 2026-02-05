@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.BindException;
 import java.net.Socket;
 
 public class MainServer {
@@ -11,7 +12,11 @@ Server server;
             System.out.println("Il server è in ascolto");
             Socket socket = server.attendi();
             System.out.println("IL server è connesso al client");
-        } catch (IOException e) {
+        }
+        catch(BindException e){
+            System.out.println("La porta è occupata");
+        }
+        catch (IOException e) {
            e.printStackTrace();
             System.exit(1);
 
