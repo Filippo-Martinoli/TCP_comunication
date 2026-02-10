@@ -1,11 +1,14 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
     private int porta;
+    private Connection clientSocket;
 
     public Server(int porta) throws IOException {
         this.porta = this.porta;
@@ -27,10 +30,20 @@ public class Server {
     public void leggi(){
 
     }
-    public void chiudi(){
+    public void chiudi(){//termina la comunicazione
+        try {
+            clientSocket.close();
+        } catch (IOException e) {
+            System.err.println("errore nell chiusura nel socket dei dati");
+        }
 
     }
     public void termina(){
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            System.err.println("errore nell chiusura nel socket dei dati");
+        }
 
     }
-}
+    }

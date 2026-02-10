@@ -1,4 +1,6 @@
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Client {
     private String nome;
@@ -13,8 +15,19 @@ public class Client {
         this.nome = nome;
         this.colore = colore;
     }
-    public int connetti (String nomeServer, int portaServer){
 
+    public Client(String filippo) {
+    }
+
+    public int connetti (String nomeServer, int portaServer)  {
+        try {
+            socket = new Socket(nomeServer, portaServer);
+            System.out.println("CLIENT: il client è collegato al server ");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+
+        }
         return portaServer;
     }
     public void scrivi(){
