@@ -1,17 +1,29 @@
+import java.util.Scanner;
+
 public class MainClient {
+
     public static void main(String[] args) {
+
         Client client = new Client();
-        int esito = client.connetti("localhost", 12345);
+        client.connetti("localhost", 12345);
 
-        if (esito == 0) {
+        Scanner tastiera = new Scanner(System.in);
 
-            client.scrivi("Richiesta dal client");
-            client.leggi();
-            client.chiudi();
+        String msg = "";
 
-        } else {
+        while (!msg.equals("fine")) {
 
-            System.out.println("Server non disponibile");
+            System.out.print("Inserisci messaggio: ");
+            msg = tastiera.nextLine();
+
+            client.invia(msg);
+
+            if (!msg.equals("fine")) {
+                String risposta = client.ricevi();
+                System.out.println("Server -> " + risposta);
+            }
         }
+
+        client.chiudi();
     }
 }
