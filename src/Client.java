@@ -1,96 +1,54 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class Client {
 
-    private String nome;
-    private String colore;
     private Socket socket;
-
-    private PrintWriter out;
-    private BufferedReader in;
+    private DataOutputStream out;
+    private DataInputStream in;
 
     public Client() {
-        this.nome = nome;
     }
 
-    public Client(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public Client setNome(String nome) {
-        this.nome = nome;
-        return this;
-    }
-
-    public String getColore() {
-        return colore;
-    }
-
-    public Client setColore(String colore) {
-        this.colore = colore;
-        return this;
-    }
-
-    public Socket getSocket() {
-        return socket;
-    }
-
-    public Client setSocket(Socket socket) {
-        this.socket = socket;
-        return this;
-    }
-
-    public int connetti(String nomeServer, int portaServer) {
+    
+    public void connetti(String server, int porta) {
         try {
-            socket = new Socket(nomeServer, portaServer);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream())
-            );
+            socket = new Socket(server, porta);
 
-            System.out.println("Connesso al server");
-            return 0;
+            out = new DataOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
 
+            System.out.println("Client connesso");
         } catch (IOException e) {
-            System.out.println("Errore di connessione: " + e.getMessage());
-            return -1;
+            System.out.println("Errore di connessione");
         }
     }
 
-    public void scrivi(String msg) {
-        if (out != null) {
-            out.println(msg);
-        }
-    }
-
-    public void leggi() {
+    
+    public void invia(String msg) {
         try {
-            String risposta = in.readLine();
-            System.out.println("Risposta server: " + risposta);
-
+            out.writeUTF(msg);
         } catch (IOException e) {
-            System.out.println("Errore di lettura");
+            System.out.println("Errore nell' invio");
         }
     }
 
+    
+    public String ricevi() {
+        try {
+            return in.readUTF();
+        } catch (IOException e) {
+            System.out.println("Errore nella ricezione");
+            return null;
+        }
+    }
+    
     public void chiudi() {
         try {
-            if (socket != null) {
-                socket.close();
-            }
-
+            socket.close();
             System.out.println("Client chiuso");
-
         } catch (IOException e) {
-            System.out.println("Errore di chiusura");
+            System.out.println("Errore chiusura");
         }
     }
 }
