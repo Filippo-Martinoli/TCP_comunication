@@ -1,98 +1,59 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class Server {
 
     private ServerSocket serverSocket;
-    private Socket socket;
-    private int porta;
-    private PrintWriter out;
-    private BufferedReader in;
+    private Socket client;
+    private DataOutputStream out;
+    private DataInputStream in;
 
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
-
-    public Server setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-        return this;
-    }
-
-    public Socket getClientSocket() {
-        return socket;
-    }
-
-    public Server setClientSocket(Socket clientSocket) {
-        this.socket = clientSocket;
-        return this;
-    }
-
-    public int getPorta() {
-        return porta;
-    }
-
-    public Server(int porta) throws IOException {
-        this.porta = porta;
-        serverSocket = new ServerSocket(porta);
-    }
-
-    public Socket attendi() {
-
+    public Server(int porta) {
         try {
-            socket = serverSocket.accept();
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream())
-            );
-
+            serverSocket = new ServerSocket(porta);
+            System.out.println("Server avviato");
         } catch (IOException e) {
-            System.out.println("Errore di accettazione del client");
-        }
-
-        return socket;
-    }
-
-    public void scrivi(String msg) {
-        if (out != null) {
-            out.println(msg);
+            System.out.println("Errore avvio del server");
         }
     }
 
-    public String leggi() {
-
+    public void attendi() {
         try {
-            return in.readLine();
+            System.out.println("In attesa del client");
+            client = serverSocket.accept();
 
+            out = new DataOutputStream(client.getOutputStream());
+            in = new DataInputStream(client.getInputStream());
+
+            System.out.println("Client connesso");
         } catch (IOException e) {
+            System.out.println("Errore accept");
+        }
+    }
+
+    public String ricevi() {
+        try {
+            return in.readUTF();
+        } catch (IOException e) {
+            System.out.println("Errore nella ricezione");
             return null;
         }
     }
 
-    public void chiudi() {
-
+    public void invia(String msg) {
         try {
-            if (socket != null) {
-                socket.close();
-            }
-
+            out.writeUTF(msg);
         } catch (IOException e) {
+            System.out.println("Errore nell'invio");
         }
     }
 
-    public void termina() {
-
+    public void chiudi() {
         try {
-            if (serverSocket != null) {
-                serverSocket.close();
-            }
-
-            System.out.println("il Server è terminato");
-
+            client.close();
+            System.out.println("Connessione di chiusa");
         } catch (IOException e) {
+            System.out.println("Errore nella chiusura");
         }
     }
 }
