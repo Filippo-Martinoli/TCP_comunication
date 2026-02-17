@@ -1,49 +1,59 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.io.*;
+import java.net.*;
 
 public class Server {
+
     private ServerSocket serverSocket;
-    private Socket socket;
-    private int porta;
-    private Connection clientSocket;
+    private Socket client;
+    private DataOutputStream out;
+    private DataInputStream in;
 
-    public Server(int porta) throws IOException {
-        this.porta = this.porta;
-        this.serverSocket = serverSocket;
-        serverSocket = new ServerSocket(porta);
-
-    }
-    public Socket attendi(){
+    public Server(int porta) {
         try {
-            socket = serverSocket.accept();
+            serverSocket = new ServerSocket(porta);
+            System.out.println("Server avviato");
         } catch (IOException e) {
-            // il server non riesci ad accettare la connessione con il client
+            System.out.println("Errore avvio del server");
         }
-        return socket;
     }
-    public void scrivi(){
 
-    }
-    public void leggi(){
-
-    }
-    public void chiudi(){//termina la comunicazione
+    public void attendi() {
         try {
-            clientSocket.close();
-        } catch (IOException e) {
-            System.err.println("errore nell chiusura nel socket dei dati");
-        }
+            System.out.println("In attesa del client");
+            client = serverSocket.accept();
 
+            out = new DataOutputStream(client.getOutputStream());
+            in = new DataInputStream(client.getInputStream());
+
+            System.out.println("Client non connesso");
+        } catch (IOException e) {
+            System.out.println("Errore accept");
+        }
     }
-    public void termina(){
+
+    public String ricevi() {
         try {
-            serverSocket.close();
+            return in.readUTF();
         } catch (IOException e) {
-            System.err.println("errore nell chiusura nel socket dei dati");
+            System.out.println("Errore nella ricezione");
+            return null;
         }
+    }
 
+    public void invia(String msg) {
+        try {
+            out.writeUTF(msg);
+        } catch (IOException e) {
+            System.out.println("Errore nell'invio");
+        }
     }
+
+    public void chiudi() {
+        try {
+            client.close();
+            System.out.println("Connessione di chiusa");
+        } catch (IOException e) {
+            System.out.println("Errore nella chiusura");
+        }
     }
+}
