@@ -1,36 +1,52 @@
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 
 public class Server {
     private ServerSocket serverSocket;
-    private Socket socket;
-    private int porta;
+    private Socket client;
+    private DataOutputStream out;
+    private DataInputStream in;
 
-    public Server(int porta) throws IOException {
-        this.porta = this.porta;
-        this.serverSocket = serverSocket;
-        serverSocket = new ServerSocket(porta);
-
-    }
-    public Socket attendi(){
+    public Server(int porta) {
         try {
-            socket = serverSocket.accept();
+            serverSocket = new ServerSocket(porta);
+            System.out.println("Server avviato");
         } catch (IOException e) {
-            // il server non riesci ad accettare la connessione con il client
+            System.out.println("Errore avvio server");
         }
-        return socket;
     }
-    public void scrivi(){
-
+    public void attendi() {
+        try {
+            System.out.println("In attesa client...");
+            client = serverSocket.accept();
+            out = new DataOutputStream(client.getOutputStream());
+            in = new DataInputStream(client.getInputStream());
+            System.out.println("Client connesso");
+        } catch (IOException e) {
+            System.out.println("Errore accept");
+        }
     }
-    public void leggi(){
-
+    public String ricevi() {
+        try {
+            return in.readUTF();
+        } catch (IOException e) {
+            System.out.println("Errore nella ricezione");
+            return null;
+        }
     }
-    public void chiudi(){
-
+    public void invia(String msg) {
+        try {
+            out.writeUTF(msg);
+        } catch (IOException e) {
+            System.out.println("Errore invio");
+        }
     }
-    public void termina(){
-
+    public void chiudi() {
+        try {
+            client.close();
+            System.out.println("Connessione chiusa");
+        } catch (IOException e) {
+            System.out.println("Errore nella chiusura");
+        }
     }
 }
