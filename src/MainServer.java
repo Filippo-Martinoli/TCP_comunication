@@ -1,26 +1,21 @@
-import java.io.IOException;
-import java.net.BindException;
-import java.net.Socket;
-
 public class MainServer {
-    public static void main(String[] args){
-int porta= 12345;
-Server server;
+    public static void main(String[] args) {
 
-        try {
-            server = new Server(porta);
-            System.out.println("Il server è in ascolto");
-            Socket socket = server.attendi();
-            System.out.println("IL server è connesso al client");
-        }
-        catch(BindException e){
-            System.out.println("La porta è occupata");
-        }
-        catch (IOException e) {
-           e.printStackTrace();
-            System.exit(1);
+        Server server = new Server(3241);
+        while (true) {
+            server.attendi();
+            String msg = "";
+            while (!msg.equals("fine")) {
+                msg = server.ricevi();
 
+                if (msg == null) break;
+                System.out.println("Ricevuto: " + msg);
+                if (!msg.equals("fine")) {
+                    server.invia("Ricevuto: " + msg);
+                }
+            }
+
+            server.chiudi();
         }
     }
-
 }
