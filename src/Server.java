@@ -26,7 +26,7 @@ public class Server {
             System.out.println("Errore accept");
         }
     }
-    public String ricevi() {
+    public String leggi() {
         try {
             return in.readUTF();
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class Server {
             return null;
         }
     }
-    public void invia(String msg) {
+    public void scrivi(String msg) {
         try {
             out.writeUTF(msg);
         } catch (IOException e) {
