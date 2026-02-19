@@ -6,12 +6,12 @@ public class MainServer {
             server.attendi();
             String msg = "";
             while (!msg.equals("fine")) {
-                msg = server.ricevi();
+                msg = server.leggi();
 
                 if (msg == null) break;
                 System.out.println("Ricevuto: " + msg);
                 if (!msg.equals("fine")) {
-                    server.invia("Ricevuto: " + msg);
+                    server.scrivi("Ricevuto: " + msg);
                 }
             }
 
