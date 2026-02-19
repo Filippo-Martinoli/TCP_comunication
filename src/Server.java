@@ -28,7 +28,7 @@ public class Server {
     }
     public String leggi() {
         try {
-            return in.readUTF();
+            reader.read(msg);
         } catch (IOException e) {
             System.out.println("Errore nella ricezione");
             return null;
@@ -36,7 +36,7 @@ public class Server {
     }
     public void scrivi(String msg) {
         try {
-            out.writeUTF(msg);
+            writer.write(msg);
         } catch (IOException e) {
             System.out.println("Errore invio");
         }
