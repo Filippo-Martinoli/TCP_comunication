@@ -13,14 +13,14 @@ public class GestoreClient extends Thread {
             System.out.println("Client gestito in parallelo: " + socket);
 
             while (true) {
-                String richiesta = in.readLine();
-                if (richiesta == null) break;
-                System.out.println("Ricevuto: " + richiesta);
-                if (richiesta.equalsIgnoreCase("fine")){
+                String msg = in.readLine();
+                if (msg == null) break;
+                System.out.println("Ricevuto: " + msg);
+                if (msg.equalsIgnoreCase("fine")){
                     out.println("Arrivederci");
                     break;
                 }
-                out.println("Ricevuto: " + richiesta.toUpperCase());
+                out.println("Ricevuto: " + msg.toUpperCase());
             }
             socket.close();
             System.out.println("Client chiuso: " + socket);
