@@ -23,7 +23,7 @@ public class Client {
         }
     }
 
-    public void invia(String msg) {
+    public void scrivi(String msg) {
         try {
             out.writeUTF(msg);
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class Client {
         }
     }
 
-    public String ricevi() {
+    public String leggi() {
         try {
             return in.readUTF();
         } catch (IOException e) {
