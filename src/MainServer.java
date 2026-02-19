@@ -1,7 +1,7 @@
 public class MainServer {
     public static void main(String[] args) {
 
-        Server server = new Server(3241);
+        Server server = new Server(12345);
         while (true) {
             server.attendi();
             String msg = "";
