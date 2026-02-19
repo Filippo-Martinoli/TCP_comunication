@@ -5,7 +5,7 @@ public class MainClient {
     public static void main(String[] args) {
 
         Client client = new Client();
-        client.connetti("localhost", 3241);
+        client.connetti("localhost", 12345);
 
         Scanner tastiera = new Scanner(System.in);
 
@@ -16,10 +16,10 @@ public class MainClient {
             System.out.print("Inserisci messaggio: ");
             msg = tastiera.nextLine();
 
-            client.invia(msg);
+            client.scrivi(msg);
 
             if (!msg.equals("fine")) {
-                String risposta = client.ricevi();
+                String risposta = client.leggi();
                 System.out.println("Server " + risposta);
             }
         }
